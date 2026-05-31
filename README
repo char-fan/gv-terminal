@@ -1,0 +1,18 @@
+# gv-terminal
+## 简述
+一个使用 GPLv3 协议开源，C语言编写，非常自由的终端
+
+## 构建方式
+### 1. 克隆源码
+``` bash
+git clone https://github.com/char-fan/gv-terminal.git
+```
+### 2.创建目录并构建
+``` bash
+cd gv-terminal
+mkdir build && cd build
+chmod +x ../configure  # 如果没有执行权限
+../configure --prefix=/usr
+make -j$(nproc)
+make install  # 可选
+```
