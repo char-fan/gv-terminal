@@ -2,7 +2,7 @@
 #include <glib.h>
 #include <stdio.h>
 
-#define CONFIG_DIR  "gv-console"
+#define CONFIG_DIR  "gv-terminal"
 #define CONFIG_FILE "config.ini"
 
 static GKeyFile *load_config() {

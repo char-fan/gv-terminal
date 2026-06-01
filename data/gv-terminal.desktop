@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=gv-terminal
+Comment=Simple GTK Terminal
+Exec=gv-terminal
+Icon=gv-terminal
+Terminal=false
+Type=Application
+Categories=System;TerminalEmulator;
+Keywords=terminal;console;shell;

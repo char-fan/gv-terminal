@@ -46,7 +46,7 @@ static void on_apply_font_clicked(GtkButton *button, gpointer data) {
 
 void show_settings_dialog(GtkWidget *window, GtkWidget *term) {
     GtkWidget *dialog = gtk_dialog_new_with_buttons(
-        "设置 - gv-console", GTK_WINDOW(window),
+        "设置 - gv-terminal", GTK_WINDOW(window),
         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
         "关闭", GTK_RESPONSE_CLOSE,
         NULL);

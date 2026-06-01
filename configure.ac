@@ -1,4 +1,4 @@
-AC_INIT([gv-console], [1.0])
+AC_INIT([gv-terminal], [1.0])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_PROG_CC
 

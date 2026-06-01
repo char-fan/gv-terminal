@@ -14,6 +14,7 @@
 
 @SET_MAKE@
 
+
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -88,7 +89,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = gv-console$(EXEEXT)
+bin_PROGRAMS = gv-terminal$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -101,18 +102,19 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)"
+am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(desktopdir)" \
+	"$(DESTDIR)$(icondir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_gv_console_OBJECTS = src/gv_console-main.$(OBJEXT) \
-	src/gv_console-config.$(OBJEXT) \
-	src/gv_console-terminal.$(OBJEXT) \
-	src/gv_console-settings.$(OBJEXT)
-gv_console_OBJECTS = $(am_gv_console_OBJECTS)
+am_gv_terminal_OBJECTS = src/gv_terminal-main.$(OBJEXT) \
+	src/gv_terminal-config.$(OBJEXT) \
+	src/gv_terminal-terminal.$(OBJEXT) \
+	src/gv_terminal-settings.$(OBJEXT)
+gv_terminal_OBJECTS = $(am_gv_terminal_OBJECTS)
 am__DEPENDENCIES_1 =
-gv_console_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
-gv_console_LINK = $(CCLD) $(gv_console_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
+gv_terminal_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+gv_terminal_LINK = $(CCLD) $(gv_terminal_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -128,10 +130,10 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = src/$(DEPDIR)/gv_console-config.Po \
-	src/$(DEPDIR)/gv_console-main.Po \
-	src/$(DEPDIR)/gv_console-settings.Po \
-	src/$(DEPDIR)/gv_console-terminal.Po
+am__depfiles_remade = src/$(DEPDIR)/gv_terminal-config.Po \
+	src/$(DEPDIR)/gv_terminal-main.Po \
+	src/$(DEPDIR)/gv_terminal-settings.Po \
+	src/$(DEPDIR)/gv_terminal-terminal.Po
 am__mv = mv -f
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -149,13 +151,40 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(gv_console_SOURCES)
-DIST_SOURCES = $(gv_console_SOURCES)
+SOURCES = $(gv_terminal_SOURCES)
+DIST_SOURCES = $(gv_terminal_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
+am__install_max = 40
+am__nobase_strip_setup = \
+  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
+am__nobase_strip = \
+  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
+am__nobase_list = $(am__nobase_strip_setup); \
+  for p in $$list; do echo "$$p $$p"; done | \
+  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
+  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
+    if (++n[$$2] == $(am__install_max)) \
+      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
+    END { for (dir in files) print dir, files[dir] }'
+am__base_list = \
+  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+am__uninstall_files_from_dir = { \
+  { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
+  || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
+       $(am__cd) "$$dir" && echo $$files | $(am__xargs_n) 40 $(am__rm_f); }; \
+  }
+DATA = $(desktop_DATA) $(icon_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -294,14 +323,18 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-gv_console_SOURCES = \
+gv_terminal_SOURCES = \
     src/main.c \
     src/config.c \
     src/terminal.c \
     src/settings.c
 
-gv_console_CFLAGS = $(GTK_CFLAGS) $(VTE_CFLAGS) -I$(top_srcdir)/src
-gv_console_LDADD = $(GTK_LIBS) $(VTE_LIBS)
+gv_terminal_CFLAGS = $(GTK_CFLAGS) $(VTE_CFLAGS) -I$(top_srcdir)/src
+gv_terminal_LDADD = $(GTK_LIBS) $(VTE_LIBS)
+desktopdir = $(datadir)/applications
+desktop_DATA = data/gv-terminal.desktop
+icondir = $(datadir)/icons/hicolor/128x128/apps
+icon_DATA = data/gv-terminal.png
 all: all-am
 
 .SUFFIXES:
@@ -387,18 +420,18 @@ src/$(am__dirstamp):
 src/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) src/$(DEPDIR)
 	@: >>src/$(DEPDIR)/$(am__dirstamp)
-src/gv_console-main.$(OBJEXT): src/$(am__dirstamp) \
+src/gv_terminal-main.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/gv_console-config.$(OBJEXT): src/$(am__dirstamp) \
+src/gv_terminal-config.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/gv_console-terminal.$(OBJEXT): src/$(am__dirstamp) \
+src/gv_terminal-terminal.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/gv_console-settings.$(OBJEXT): src/$(am__dirstamp) \
+src/gv_terminal-settings.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 
-gv-console$(EXEEXT): $(gv_console_OBJECTS) $(gv_console_DEPENDENCIES) $(EXTRA_gv_console_DEPENDENCIES) 
-	@rm -f gv-console$(EXEEXT)
-	$(AM_V_CCLD)$(gv_console_LINK) $(gv_console_OBJECTS) $(gv_console_LDADD) $(LIBS)
+gv-terminal$(EXEEXT): $(gv_terminal_OBJECTS) $(gv_terminal_DEPENDENCIES) $(EXTRA_gv_terminal_DEPENDENCIES) 
+	@rm -f gv-terminal$(EXEEXT)
+	$(AM_V_CCLD)$(gv_terminal_LINK) $(gv_terminal_OBJECTS) $(gv_terminal_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -407,10 +440,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/gv_console-config.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/gv_console-main.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/gv_console-settings.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/gv_console-terminal.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/gv_terminal-config.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/gv_terminal-main.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/gv_terminal-settings.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/gv_terminal-terminal.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -434,61 +467,103 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-src/gv_console-main.o: src/main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -MT src/gv_console-main.o -MD -MP -MF src/$(DEPDIR)/gv_console-main.Tpo -c -o src/gv_console-main.o `test -f 'src/main.c' || echo '$(srcdir)/'`src/main.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_console-main.Tpo src/$(DEPDIR)/gv_console-main.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/main.c' object='src/gv_console-main.o' libtool=no @AMDEPBACKSLASH@
+src/gv_terminal-main.o: src/main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -MT src/gv_terminal-main.o -MD -MP -MF src/$(DEPDIR)/gv_terminal-main.Tpo -c -o src/gv_terminal-main.o `test -f 'src/main.c' || echo '$(srcdir)/'`src/main.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_terminal-main.Tpo src/$(DEPDIR)/gv_terminal-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/main.c' object='src/gv_terminal-main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -c -o src/gv_console-main.o `test -f 'src/main.c' || echo '$(srcdir)/'`src/main.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -c -o src/gv_terminal-main.o `test -f 'src/main.c' || echo '$(srcdir)/'`src/main.c
 
-src/gv_console-main.obj: src/main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -MT src/gv_console-main.obj -MD -MP -MF src/$(DEPDIR)/gv_console-main.Tpo -c -o src/gv_console-main.obj `if test -f 'src/main.c'; then $(CYGPATH_W) 'src/main.c'; else $(CYGPATH_W) '$(srcdir)/src/main.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_console-main.Tpo src/$(DEPDIR)/gv_console-main.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/main.c' object='src/gv_console-main.obj' libtool=no @AMDEPBACKSLASH@
+src/gv_terminal-main.obj: src/main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -MT src/gv_terminal-main.obj -MD -MP -MF src/$(DEPDIR)/gv_terminal-main.Tpo -c -o src/gv_terminal-main.obj `if test -f 'src/main.c'; then $(CYGPATH_W) 'src/main.c'; else $(CYGPATH_W) '$(srcdir)/src/main.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_terminal-main.Tpo src/$(DEPDIR)/gv_terminal-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/main.c' object='src/gv_terminal-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -c -o src/gv_console-main.obj `if test -f 'src/main.c'; then $(CYGPATH_W) 'src/main.c'; else $(CYGPATH_W) '$(srcdir)/src/main.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -c -o src/gv_terminal-main.obj `if test -f 'src/main.c'; then $(CYGPATH_W) 'src/main.c'; else $(CYGPATH_W) '$(srcdir)/src/main.c'; fi`
 
-src/gv_console-config.o: src/config.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -MT src/gv_console-config.o -MD -MP -MF src/$(DEPDIR)/gv_console-config.Tpo -c -o src/gv_console-config.o `test -f 'src/config.c' || echo '$(srcdir)/'`src/config.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_console-config.Tpo src/$(DEPDIR)/gv_console-config.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/config.c' object='src/gv_console-config.o' libtool=no @AMDEPBACKSLASH@
+src/gv_terminal-config.o: src/config.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -MT src/gv_terminal-config.o -MD -MP -MF src/$(DEPDIR)/gv_terminal-config.Tpo -c -o src/gv_terminal-config.o `test -f 'src/config.c' || echo '$(srcdir)/'`src/config.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_terminal-config.Tpo src/$(DEPDIR)/gv_terminal-config.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/config.c' object='src/gv_terminal-config.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -c -o src/gv_console-config.o `test -f 'src/config.c' || echo '$(srcdir)/'`src/config.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -c -o src/gv_terminal-config.o `test -f 'src/config.c' || echo '$(srcdir)/'`src/config.c
 
-src/gv_console-config.obj: src/config.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -MT src/gv_console-config.obj -MD -MP -MF src/$(DEPDIR)/gv_console-config.Tpo -c -o src/gv_console-config.obj `if test -f 'src/config.c'; then $(CYGPATH_W) 'src/config.c'; else $(CYGPATH_W) '$(srcdir)/src/config.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_console-config.Tpo src/$(DEPDIR)/gv_console-config.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/config.c' object='src/gv_console-config.obj' libtool=no @AMDEPBACKSLASH@
+src/gv_terminal-config.obj: src/config.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -MT src/gv_terminal-config.obj -MD -MP -MF src/$(DEPDIR)/gv_terminal-config.Tpo -c -o src/gv_terminal-config.obj `if test -f 'src/config.c'; then $(CYGPATH_W) 'src/config.c'; else $(CYGPATH_W) '$(srcdir)/src/config.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_terminal-config.Tpo src/$(DEPDIR)/gv_terminal-config.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/config.c' object='src/gv_terminal-config.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -c -o src/gv_console-config.obj `if test -f 'src/config.c'; then $(CYGPATH_W) 'src/config.c'; else $(CYGPATH_W) '$(srcdir)/src/config.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -c -o src/gv_terminal-config.obj `if test -f 'src/config.c'; then $(CYGPATH_W) 'src/config.c'; else $(CYGPATH_W) '$(srcdir)/src/config.c'; fi`
 
-src/gv_console-terminal.o: src/terminal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -MT src/gv_console-terminal.o -MD -MP -MF src/$(DEPDIR)/gv_console-terminal.Tpo -c -o src/gv_console-terminal.o `test -f 'src/terminal.c' || echo '$(srcdir)/'`src/terminal.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_console-terminal.Tpo src/$(DEPDIR)/gv_console-terminal.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/terminal.c' object='src/gv_console-terminal.o' libtool=no @AMDEPBACKSLASH@
+src/gv_terminal-terminal.o: src/terminal.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -MT src/gv_terminal-terminal.o -MD -MP -MF src/$(DEPDIR)/gv_terminal-terminal.Tpo -c -o src/gv_terminal-terminal.o `test -f 'src/terminal.c' || echo '$(srcdir)/'`src/terminal.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_terminal-terminal.Tpo src/$(DEPDIR)/gv_terminal-terminal.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/terminal.c' object='src/gv_terminal-terminal.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -c -o src/gv_console-terminal.o `test -f 'src/terminal.c' || echo '$(srcdir)/'`src/terminal.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -c -o src/gv_terminal-terminal.o `test -f 'src/terminal.c' || echo '$(srcdir)/'`src/terminal.c
 
-src/gv_console-terminal.obj: src/terminal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -MT src/gv_console-terminal.obj -MD -MP -MF src/$(DEPDIR)/gv_console-terminal.Tpo -c -o src/gv_console-terminal.obj `if test -f 'src/terminal.c'; then $(CYGPATH_W) 'src/terminal.c'; else $(CYGPATH_W) '$(srcdir)/src/terminal.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_console-terminal.Tpo src/$(DEPDIR)/gv_console-terminal.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/terminal.c' object='src/gv_console-terminal.obj' libtool=no @AMDEPBACKSLASH@
+src/gv_terminal-terminal.obj: src/terminal.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -MT src/gv_terminal-terminal.obj -MD -MP -MF src/$(DEPDIR)/gv_terminal-terminal.Tpo -c -o src/gv_terminal-terminal.obj `if test -f 'src/terminal.c'; then $(CYGPATH_W) 'src/terminal.c'; else $(CYGPATH_W) '$(srcdir)/src/terminal.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_terminal-terminal.Tpo src/$(DEPDIR)/gv_terminal-terminal.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/terminal.c' object='src/gv_terminal-terminal.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -c -o src/gv_console-terminal.obj `if test -f 'src/terminal.c'; then $(CYGPATH_W) 'src/terminal.c'; else $(CYGPATH_W) '$(srcdir)/src/terminal.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -c -o src/gv_terminal-terminal.obj `if test -f 'src/terminal.c'; then $(CYGPATH_W) 'src/terminal.c'; else $(CYGPATH_W) '$(srcdir)/src/terminal.c'; fi`
 
-src/gv_console-settings.o: src/settings.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -MT src/gv_console-settings.o -MD -MP -MF src/$(DEPDIR)/gv_console-settings.Tpo -c -o src/gv_console-settings.o `test -f 'src/settings.c' || echo '$(srcdir)/'`src/settings.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_console-settings.Tpo src/$(DEPDIR)/gv_console-settings.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/settings.c' object='src/gv_console-settings.o' libtool=no @AMDEPBACKSLASH@
+src/gv_terminal-settings.o: src/settings.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -MT src/gv_terminal-settings.o -MD -MP -MF src/$(DEPDIR)/gv_terminal-settings.Tpo -c -o src/gv_terminal-settings.o `test -f 'src/settings.c' || echo '$(srcdir)/'`src/settings.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_terminal-settings.Tpo src/$(DEPDIR)/gv_terminal-settings.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/settings.c' object='src/gv_terminal-settings.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -c -o src/gv_console-settings.o `test -f 'src/settings.c' || echo '$(srcdir)/'`src/settings.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -c -o src/gv_terminal-settings.o `test -f 'src/settings.c' || echo '$(srcdir)/'`src/settings.c
 
-src/gv_console-settings.obj: src/settings.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -MT src/gv_console-settings.obj -MD -MP -MF src/$(DEPDIR)/gv_console-settings.Tpo -c -o src/gv_console-settings.obj `if test -f 'src/settings.c'; then $(CYGPATH_W) 'src/settings.c'; else $(CYGPATH_W) '$(srcdir)/src/settings.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_console-settings.Tpo src/$(DEPDIR)/gv_console-settings.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/settings.c' object='src/gv_console-settings.obj' libtool=no @AMDEPBACKSLASH@
+src/gv_terminal-settings.obj: src/settings.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -MT src/gv_terminal-settings.obj -MD -MP -MF src/$(DEPDIR)/gv_terminal-settings.Tpo -c -o src/gv_terminal-settings.obj `if test -f 'src/settings.c'; then $(CYGPATH_W) 'src/settings.c'; else $(CYGPATH_W) '$(srcdir)/src/settings.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/gv_terminal-settings.Tpo src/$(DEPDIR)/gv_terminal-settings.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/settings.c' object='src/gv_terminal-settings.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_console_CFLAGS) $(CFLAGS) -c -o src/gv_console-settings.obj `if test -f 'src/settings.c'; then $(CYGPATH_W) 'src/settings.c'; else $(CYGPATH_W) '$(srcdir)/src/settings.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gv_terminal_CFLAGS) $(CFLAGS) -c -o src/gv_terminal-settings.obj `if test -f 'src/settings.c'; then $(CYGPATH_W) 'src/settings.c'; else $(CYGPATH_W) '$(srcdir)/src/settings.c'; fi`
+install-desktopDATA: $(desktop_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(desktop_DATA)'; test -n "$(desktopdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(desktopdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(desktopdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(desktopdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(desktopdir)" || exit $$?; \
+	done
+
+uninstall-desktopDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(desktop_DATA)'; test -n "$(desktopdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(desktopdir)'; $(am__uninstall_files_from_dir)
+install-iconDATA: $(icon_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(icon_DATA)'; test -n "$(icondir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(icondir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(icondir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(icondir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(icondir)" || exit $$?; \
+	done
+
+uninstall-iconDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(icon_DATA)'; test -n "$(icondir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(icondir)'; $(am__uninstall_files_from_dir)
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -729,9 +804,9 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(PROGRAMS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(icondir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -772,10 +847,10 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -f src/$(DEPDIR)/gv_console-config.Po
-	-rm -f src/$(DEPDIR)/gv_console-main.Po
-	-rm -f src/$(DEPDIR)/gv_console-settings.Po
-	-rm -f src/$(DEPDIR)/gv_console-terminal.Po
+	-rm -f src/$(DEPDIR)/gv_terminal-config.Po
+	-rm -f src/$(DEPDIR)/gv_terminal-main.Po
+	-rm -f src/$(DEPDIR)/gv_terminal-settings.Po
+	-rm -f src/$(DEPDIR)/gv_terminal-terminal.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -792,7 +867,7 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-desktopDATA install-iconDATA
 
 install-dvi: install-dvi-am
 
@@ -823,10 +898,10 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -f src/$(DEPDIR)/gv_console-config.Po
-	-rm -f src/$(DEPDIR)/gv_console-main.Po
-	-rm -f src/$(DEPDIR)/gv_console-settings.Po
-	-rm -f src/$(DEPDIR)/gv_console-terminal.Po
+	-rm -f src/$(DEPDIR)/gv_terminal-config.Po
+	-rm -f src/$(DEPDIR)/gv_terminal-main.Po
+	-rm -f src/$(DEPDIR)/gv_terminal-settings.Po
+	-rm -f src/$(DEPDIR)/gv_terminal-terminal.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -842,7 +917,8 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am: uninstall-binPROGRAMS uninstall-desktopDATA \
+	uninstall-iconDATA
 
 .MAKE: install-am install-strip
 
@@ -854,14 +930,15 @@ uninstall-am: uninstall-binPROGRAMS
 	distclean-generic distclean-tags distcleancheck distdir \
 	distuninstallcheck dvi dvi-am html html-am info info-am \
 	install install-am install-binPROGRAMS install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-binPROGRAMS
+	install-data-am install-desktopDATA install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-iconDATA install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
+	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS \
+	uninstall-desktopDATA uninstall-iconDATA
 
 .PRECIOUS: Makefile
 

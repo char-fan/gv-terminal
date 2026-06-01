@@ -19,12 +19,12 @@ static gboolean on_terminal_button_press(GtkWidget *widget, GdkEventButton *even
 }
 
 int main(int argc, char *argv[]) {
-    prctl(PR_SET_NAME, "gv-console", 0, 0, 0);
+    prctl(PR_SET_NAME, "gv-terminal", 0, 0, 0);
 
     gtk_init(&argc, &argv);
 
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), "gv-console");
+    gtk_window_set_title(GTK_WINDOW(window), "gv-terminal");
     gtk_window_set_default_size(GTK_WINDOW(window), 800, 500);
 
     GtkWidget *term = create_terminal();
